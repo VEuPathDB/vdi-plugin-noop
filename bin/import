@@ -1,42 +1,48 @@
 #!/usr/bin/env bash
 
-# Get the current workspace directory.
-BIN_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
-# Get the lib directory
-LIB_DIR="$(cd -- "$(dirname -- "$BIN_DIR")" &> /dev/null && pwd)/lib"
+set -e
 
-# Include some common functionality
-. "$LIB_DIR/includes.sh"
+declare -ri EXIT_CODE_UNEXPECTED_ERROR=255
 
-#
-# Utilities
-#
+convertExitCode() {
+  local -ri exitCode=$?
 
-printWarning() {
-  echo "$1"
+  if [ $exitCode -ne 0 ]; then
+    exit $EXIT_CODE_UNEXPECTED_ERROR
+  fi
 }
 
-#
-# Parameter Handling
-#
+trap "convertExitCode" EXIT
+
+
+verifyDir() {
+  if [ -z "$1" ]; then
+    >&2 echo "required directory parameter was blank or absent"
+    return 1
+  fi
+
+  if [ ! -d "$1" ]; then
+    >&2 echo "directory $1 does not exist or is not a directory"
+    return 1
+  fi
+
+  return 0
+}
+
 
 INPUT_DIR=$1
 OUTPUT_DIR=$2
 
-verifyDir "${INPUT_DIR}"  || exit $EXIT_CODE_UNEXPECTED_ERROR
-verifyDir "${OUTPUT_DIR}" || exit $EXIT_CODE_UNEXPECTED_ERROR
+verifyDir "${INPUT_DIR}"
+verifyDir "${OUTPUT_DIR}"
 
-#
-# Script Body
-#
-
-logMessage "Here's a log message that will be printed to STDERR"
-
->&2 env
-
+# Copy input files to output dir.
 for file in "${INPUT_DIR}"/*; do
-  logMessage "Copying ${file} to ${OUTPUT_DIR}"
-  printWarning "Here's a validation warning about ${file} that will be printed to STDOUT"
-  # validate "$file" || exit $EXIT_CODE_VALIDATION_ERROR
+  # Ignore meta file
+  if [[ "$file" == "${INPUT_DIR}/vdi-meta.json" ]]; then
+    continue
+  fi
+
+  >&2 echo "Copying ${file} to ${OUTPUT_DIR}"
   cp "${file}" "${OUTPUT_DIR}"
 done
