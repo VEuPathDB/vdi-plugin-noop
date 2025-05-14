@@ -39,7 +39,7 @@ default:
 	@echo '        $$ eval `make shell-cmd`'
 
 build:
-	@$(CONTAINER_CMD) compose build
+	@docker build -t $(IMAGE_NAME) .
 
 start: .env
 	@mkdir -p mount/$$(grep 'SITE_BUILD=' .env | cut -d= -f2)
