@@ -14,7 +14,7 @@ COPY bin/ /opt/veupathdb/bin
 
 RUN chmod +x /opt/veupathdb/bin/*
 
-ARG PLUGIN_SERVER_VERSION=v8.2.0-beta.2
+ARG PLUGIN_SERVER_VERSION=v8.2.0-beta.4
 RUN wget "https://github.com/VEuPathDB/vdi-plugin-handler-server/releases/download/${PLUGIN_SERVER_VERSION}/service.jar" \
   -O vdi-plugin-noop.jar
 
