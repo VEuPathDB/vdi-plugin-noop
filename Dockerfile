@@ -14,9 +14,9 @@ COPY bin/ /opt/veupathdb/bin
 
 RUN chmod +x /opt/veupathdb/bin/*
 
-ARG PLUGIN_SERVER_VERSION=v8.2.0-beta.4
-RUN wget "https://github.com/VEuPathDB/vdi-plugin-handler-server/releases/download/${PLUGIN_SERVER_VERSION}/service.jar" \
-  -O vdi-plugin-noop.jar
+# VDI PLUGIN SERVER
+ARG PLUGIN_SERVER_VERSION=v1.7.0-b.1
+RUN curl "https://github.com/VEuPathDB/vdi-service/releases/download/${PLUGIN_SERVER_VERSION}/plugin-server.tar.gz" -Lf --no-progress-meter | tar -xz
 
 CMD java -jar \
   -XX:+CrashOnOutOfMemoryError \
