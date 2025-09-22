@@ -6,7 +6,7 @@ ENV LANG=en_US.UTF-8 \
   TZ="America/New_York" \
   PATH=/opt/veupathdb/bin:$PATH
 
-RUN apk add --no-cache wget musl-locales tzdata \
+RUN apk add --no-cache curl musl-locales tzdata \
   && cp /usr/share/zoneinfo/America/New_York /etc/localtime \
   && echo ${TZ} > /etc/timezone
 
