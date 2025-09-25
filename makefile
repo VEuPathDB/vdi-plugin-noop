@@ -39,7 +39,7 @@ default:
 	@echo '        $$ eval `make shell-cmd`'
 
 build:
-	@docker build -t $(IMAGE_NAME) .
+	@docker build -t veupathdb/$(IMAGE_NAME) .
 
 start: .env
 	@mkdir -p mount/$$(grep 'SITE_BUILD=' .env | cut -d= -f2)
