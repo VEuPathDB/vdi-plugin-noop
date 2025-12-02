@@ -1,14 +1,12 @@
-FROM amazoncorretto:24-alpine3.21
+FROM amazoncorretto:25-alpine3.22-jdk
 
 ENV LANG=en_US.UTF-8 \
-  JVM_MEM_ARGS="-Xms4m -Xmx32m" \
+  JVM_MEM_ARGS="-Xms16m -Xmx64m" \
   JVM_ARGS="" \
   TZ="America/New_York" \
   PATH=/opt/veupathdb/bin:$PATH
 
-RUN apk add --no-cache curl musl-locales tzdata \
-  && cp /usr/share/zoneinfo/America/New_York /etc/localtime \
-  && echo ${TZ} > /etc/timezone
+RUN apk add --no-cache curl tzdata netcat-openbsd
 
 COPY bin/ /opt/veupathdb/bin
 
